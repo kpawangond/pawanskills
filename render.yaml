@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: the-skills-tree     # <- service name (can be anything you like)
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      npm install --prefix theme/static_src
+      npm run build --prefix theme/static_src
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: gunicorn TheSkillsTree.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
